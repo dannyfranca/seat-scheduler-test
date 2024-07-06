@@ -1,6 +1,6 @@
 import { LifecycleManager } from './adapters/lifecycle-manager';
 import { ConsoleLogger } from './adapters/logger/console-logger';
-import { LogLevel } from './adapters/logger/logger';
+import { LogLevel } from './adapters/logger/base-logger';
 
 /**
  * Creates a container that holds all dependencies for the application.

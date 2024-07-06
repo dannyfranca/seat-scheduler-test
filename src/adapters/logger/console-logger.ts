@@ -1,4 +1,4 @@
-import { LogLevel, Logger } from './logger';
+import { LogLevel, Logger } from './base-logger';
 
 export class ConsoleLogger<
   BaseType extends Record<string, unknown> = Record<string, unknown>,
