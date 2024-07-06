@@ -1,16 +1,10 @@
-import { EventEmitter } from 'events';
-
 type Hook = () => Promise<void> | void;
 
-export class LifecycleManager extends EventEmitter {
+export class LifecycleManager {
   private bootHooks: Hook[] = [];
   private shutdownHooks: Hook[] = [];
   private isShuttingDown: boolean = false;
   private ongoingExecutions: number = 0;
-
-  constructor() {
-    super();
-  }
 
   addBootHook(hook: Hook): void {
     this.bootHooks.push(hook);
@@ -26,7 +20,6 @@ export class LifecycleManager extends EventEmitter {
       await hook();
     }
     console.log('Boot process completed.');
-    this.emit('booted');
   }
 
   async shutdown(): Promise<void> {
@@ -34,7 +27,6 @@ export class LifecycleManager extends EventEmitter {
     this.isShuttingDown = true;
 
     console.log('Received shutdown signal. Starting graceful shutdown...');
-    this.emit('shuttingDown');
 
     await this.waitForOngoingRequests();
 
@@ -43,7 +35,6 @@ export class LifecycleManager extends EventEmitter {
     }
 
     console.log('Graceful shutdown complete.');
-    this.emit('shutdownComplete');
     process.exit(0);
   }
 
