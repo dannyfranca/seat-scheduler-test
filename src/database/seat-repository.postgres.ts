@@ -14,7 +14,7 @@ export class PostgresSeatRepository implements SeatRepository {
     return Seat.reconstruct(seat.id, seat.status, seat.user_id, seat.hold_expires_at);
   }
 
-  async update(seat: Seat): Promise<void> {
+  async updateAtomic(seat: Seat): Promise<void> {
     const { id, userId, status, holdExpiresAt } = seat.toJSON();
     let extraCondition = '';
 
