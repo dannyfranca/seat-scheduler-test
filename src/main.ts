@@ -2,7 +2,6 @@ import { serve } from '@hono/node-server';
 import { createDependencies } from './create-dependencies';
 import { createApp } from './create-app';
 import { loadConfigs } from './load-configs';
-import { setupGracefulShutdown } from './graceful-shutdown';
 
 const configs = await loadConfigs();
 const deps = createDependencies(configs);
@@ -21,4 +20,12 @@ const server = serve(
   }
 );
 
-setupGracefulShutdown(server, deps.lifecycleManager);
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+
+function gracefulShutdown() {
+  server.close(() => {
+    console.log('Server stopped accepting new connections.');
+    deps.lifecycleManager.shutdown();
+  });
+}
