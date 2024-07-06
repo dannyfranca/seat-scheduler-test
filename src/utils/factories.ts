@@ -1,10 +1,16 @@
 import { type Env } from 'hono';
 import { Input, MiddlewareHandler, Handler } from 'hono/types';
 
+/**
+ * Defines a handler middleware in a type-safe way.
+ */
 export const defineHandler = <P extends string = string, E extends Env = Env, I extends Input = Input>(
-  middleware: Handler<E, P, I>
-) => middleware;
+  handler: Handler<E, P, I>
+) => handler;
 
-export const createMiddleware = <E extends Env = Env, P extends string = string, I extends Input = Input>(
+/**
+ * Defines a middleware in a type-safe way.
+ */
+export const defineMiddleware = <E extends Env = Env, P extends string = string, I extends Input = Input>(
   middleware: MiddlewareHandler<E, P, I>
 ) => middleware;

@@ -8,6 +8,10 @@ export type RecursiveToJSON<T> = T extends Primitive | ((...args: any[]) => any)
       ? Array<RecursiveToJSON<U>>
       : { [K in keyof T]: RecursiveToJSON<T[K]> };
 
+/**
+ * Convert any value to a JSON-safe representation, keeping track of circular references.
+ * Useful for extracting context from completely unexpected errors.
+ */
 export const toJson = <T>(value: T, seen = new WeakSet()): RecursiveToJSON<T> => {
   // Handle primitive types and functions directly
   if (value === null || typeof value !== 'object' || typeof value === 'function') {

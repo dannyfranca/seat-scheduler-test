@@ -1,3 +1,6 @@
+/**
+ * Convert headers to a plain serializable record.
+ */
 export const headersToRecord = (headers?: HeadersInit | null): Record<string, string> => {
   const headerRecord: Record<string, string> = {};
 

@@ -3,6 +3,9 @@ import { Logger } from '../adapters/logger';
 import { safeParseErrorContext } from './safe-parse-error-context';
 import { headersToRecord } from './headers-to-record';
 
+/**
+ * Creates an error handler that logs the error with request contexts and attempts to return a meaningful failed response.
+ */
 export const errorHandler =
   (deps: { logger: Logger }): ErrorHandler =>
   (error, c) => {

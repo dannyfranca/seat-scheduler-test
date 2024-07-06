@@ -1,7 +1,7 @@
-import { createMiddleware } from '@/utils/factories';
+import { defineMiddleware } from '@/utils/factories';
 
 export const injectDependencies = (deps: Dependencies) =>
-  createMiddleware(async (c, next) => {
+  defineMiddleware(async (c, next) => {
     c.set('deps', deps);
 
     await next();
