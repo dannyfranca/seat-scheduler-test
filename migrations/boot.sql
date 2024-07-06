@@ -52,6 +52,7 @@ BEGIN
     UPDATE seats
     SET status = 'available', user_id = NULL, hold_expires_at = NULL
     WHERE status = 'held' AND hold_expires_at < CURRENT_TIMESTAMP;
+    SKIP LOCKED;
 END;
 $$ LANGUAGE plpgsql;
 
