@@ -1,6 +1,23 @@
-import { defineHandler } from '@/utils/factories';
+import { defineRoute } from '@/utils/factories';
 
-export const handleListSeats = defineHandler<':eventId'>((c) => {
-  const eventId = c.req.param('eventId');
-  return c.json({}, 200);
-});
+export const defineListSeats = defineRoute((rest) =>
+  rest.get('/:eventId/seats', async (c) => {
+    // TODO: implement
+    return c.json(
+      {
+        eventId: '',
+        seats: [
+          {
+            seatId: '',
+          },
+        ],
+      } satisfies ResponseBody,
+      201
+    );
+  })
+);
+
+interface ResponseBody {
+  eventId: string;
+  seats: Array<{ seatId: string }>;
+}
