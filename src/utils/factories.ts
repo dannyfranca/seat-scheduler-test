@@ -1,12 +1,9 @@
-import { type Env } from 'hono';
-import { Input, MiddlewareHandler, Handler } from 'hono/types';
+import { type Hono, type Env } from 'hono';
+import { Input, MiddlewareHandler, type Schema } from 'hono/types';
 
-/**
- * Defines a handler middleware in a type-safe way.
- */
-export const defineHandler = <P extends string = string, E extends Env = Env, I extends Input = Input>(
-  handler: Handler<E, P, I>
-) => handler;
+export const defineRoute = <E extends Env = Env, S extends Schema = Schema, BasePath extends string = '/'>(
+  restFactory: (rest: Hono<E, S, BasePath>) => Hono<E, S, BasePath>
+) => restFactory;
 
 /**
  * Defines a middleware in a type-safe way.
