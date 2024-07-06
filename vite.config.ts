@@ -13,7 +13,7 @@ export default defineConfig({
     sourcemap: true,
     target: 'es2022',
     rollupOptions: {
-      input: 'src/index.ts',
+      input: 'src/main.ts',
     },
   },
   test: {
