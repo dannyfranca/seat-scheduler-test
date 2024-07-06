@@ -4,6 +4,7 @@ import { ConsoleLogger } from './adapters/logger/console-logger';
 import { LogLevel } from './adapters/logger/base-logger';
 import { CreateEvent } from './usecases/create-event';
 import { PostgresEventRepository } from './database/event-repository.postgres';
+import { PostgresSeatRepository } from './database/seat-repository.postgres';
 
 /**
  * Creates a container that holds all dependencies for the application.
@@ -18,6 +19,7 @@ export const createDependencies = (conf: AppConfig): Dependencies => {
   lifecycleManager.addShutdownHook(() => pgClient.end());
 
   const eventRepo = new PostgresEventRepository(pgClient);
+  const seatRepo = new PostgresSeatRepository(pgClient);
 
   const createEvent = new CreateEvent(eventRepo);
 
