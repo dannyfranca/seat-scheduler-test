@@ -4,13 +4,12 @@ import { defineRoute } from '@/utils/factories';
 
 export const defineCreateEvent = defineRoute((rest) =>
   rest.post('/', zValidator('json', bodySchema), async (c) => {
-    const body = c.req.valid('json');
-    // TODO: implement
+    const { totalSeats } = c.req.valid('json');
+    const { eventId } = await c.var.deps.createEvent.execute({ totalSeats });
+
     return c.json(
       {
-        eventId: '',
-        totalSeats: 0,
-        availableSeats: 0,
+        eventId,
       } satisfies ResponseBody,
       201
     );
@@ -23,6 +22,4 @@ const bodySchema = z.object({
 
 interface ResponseBody {
   eventId: string;
-  totalSeats: number;
-  availableSeats: number;
 }
