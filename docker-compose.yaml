@@ -23,7 +23,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=seat-scheduler-test
     volumes:
       - postgres-data:/var/lib/postgresql/data
     command:
@@ -36,13 +36,34 @@ services:
         '-c',
         'shared_preload_libraries=pg_cron',
         '-c',
-        'cron.database_name=postgres',
+        'cron.database_name=seat-scheduler-test',
       ]
 
   redis:
     image: redis:7.2.3-alpine3.19
     volumes:
       - redis-data:/data
+
+  db-init:
+    image: postgres:16.3-bookworm
+    volumes:
+      - ./boot.sql:/boot.sql
+    environment:
+      - PGHOST=postgres
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - PGDATABASE=seat-scheduler-test
+    depends_on:
+      - postgres
+    command: >
+      sh -c "
+        until pg_isready; do
+          >&2 echo 'Waiting for PostgreSQL to become available...'
+          sleep 1
+        done
+        >&2 echo 'PostgreSQL is available - executing script'
+        psql -f /boot.sql
+      "
 
 volumes:
   postgres-data:
