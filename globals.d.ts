@@ -1,8 +1,12 @@
 import 'hono';
 
+interface HonoBindings extends AppConfig {
+  [key: string]: unknown;
+}
+
 declare module 'hono' {
   interface Env {
-    Bindings: AppConfig;
+    Bindings: HonoBindings;
     Variables: {
       deps: Dependencies;
     };
