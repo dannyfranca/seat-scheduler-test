@@ -1,5 +1,5 @@
 import { ErrorHandler } from 'hono/types';
-import { Logger } from '../adapters/logger';
+import { Logger } from '../adapters/logger/logger';
 import { safeParseErrorContext } from './safe-parse-error-context';
 import { headersToRecord } from './headers-to-record';
 

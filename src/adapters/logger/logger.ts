@@ -87,23 +87,3 @@ const handleSpread = <T extends Record<string, any>>(context: T): T => {
 
 export const mergeContexts = <T extends Record<string, any>>(contexts: T[]): T =>
   contexts.reduce((acc, curr) => ({ ...acc, ...handleSpread(curr) }), {}) as T;
-
-export class ConsoleLogger<
-  BaseType extends Record<string, unknown> = Record<string, unknown>,
-> extends Logger<BaseType> {
-  constructor(logLevel: LogLevel = LogLevel.INFO, baseContext?: Partial<BaseType>) {
-    super(logLevel, baseContext);
-  }
-
-  log<T extends BaseType>(message: string, context?: T, level = LogLevel.INFO): void {
-    console[level](
-      JSON.stringify({
-        ...this.baseContext,
-        ...context,
-        m: message,
-        t: Date.now(),
-        l: level,
-      })
-    );
-  }
-}

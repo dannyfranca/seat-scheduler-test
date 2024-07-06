@@ -1,4 +1,6 @@
-import { ConsoleLogger, LogLevel } from './adapters/logger';
+import { LifecycleManager } from './adapters/lifecycle-manager';
+import { ConsoleLogger } from './adapters/logger/console-logger';
+import { LogLevel } from './adapters/logger/logger';
 
 /**
  * Creates a container that holds all dependencies for the application.
@@ -7,8 +9,10 @@ import { ConsoleLogger, LogLevel } from './adapters/logger';
 export const createDependencies = (env: AppConfig): Dependencies => {
   const appName = env.APP_NAME;
   const logger = new ConsoleLogger(LogLevel.INFO, { app: appName });
+  const lifecycleManager = new LifecycleManager();
 
   return {
     logger,
+    lifecycleManager,
   };
 };
