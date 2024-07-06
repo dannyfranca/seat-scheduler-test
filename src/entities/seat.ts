@@ -15,23 +15,23 @@ export class Seat {
   private userId: UniqueId | null;
   private holdExpiresAt: Date | null;
 
-  private constructor(id: UniqueId, status: SeatStatus, userId: UniqueId | null, holdExpiresAt: Date | null) {
-    this.id = id;
+  private constructor(id: string, status: SeatStatus, userId: string | null, holdExpiresAt: Date | null) {
+    this.id = new UniqueId(id);
     this.status = status;
-    this.userId = userId;
+    this.userId = userId ? new UniqueId(userId) : null;
     this.holdExpiresAt = holdExpiresAt;
   }
 
   static create(): Seat {
-    return new Seat(UniqueId.create(), 'available', null, null);
+    return new Seat(UniqueId.create().toString(), 'available', null, null);
   }
   static reconstruct(
     id: string,
     status: 'available' | 'held' | 'reserved',
-    userId: UniqueId | null,
+    userId: string | null,
     holdExpiresAt: Date | null
   ): Seat {
-    return new Seat(new UniqueId(id), status, userId, holdExpiresAt);
+    return new Seat(id, status, userId, holdExpiresAt);
   }
 
   hold(userId: UniqueId): void {

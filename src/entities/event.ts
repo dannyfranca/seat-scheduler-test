@@ -5,8 +5,8 @@ export class Event {
   private readonly id: UniqueId;
   private readonly seats: Map<string, Seat>;
 
-  private constructor(id: UniqueId, seats: Map<string, Seat>) {
-    this.id = id;
+  private constructor(id: string, seats: Map<string, Seat>) {
+    this.id = new UniqueId(id);
     this.seats = seats;
   }
 
@@ -19,18 +19,16 @@ export class Event {
       const seatId = Seat.create();
       seats.set(seatId.toString(), seatId);
     }
-    return new Event(UniqueId.create(), seats);
+    return new Event(UniqueId.create().toString(), seats);
   }
 
   static reconstruct(id: string, seatData: Array<SeatJSON>): Event {
     const seats = new Map<string, Seat>();
     seatData.forEach((seat) => {
-      const seatId = seat.id;
-      const userId = seat.userId ? new UniqueId(seat.userId) : null;
       const holdExpiresAt = seat.holdExpiresAt ? new Date(seat.holdExpiresAt) : null;
-      seats.set(seatId.toString(), Seat.reconstruct(seatId, seat.status, userId, holdExpiresAt));
+      seats.set(seat.id, Seat.reconstruct(seat.id, seat.status, seat.userId, holdExpiresAt));
     });
-    return new Event(new UniqueId(id), seats);
+    return new Event(id, seats);
   }
 
   holdSeat(seatId: UniqueId, userId: UniqueId): void {
@@ -65,6 +63,10 @@ export class Event {
 
   getId(): UniqueId {
     return this.id;
+  }
+
+  getSeats() {
+    return Array.from(this.seats.values());
   }
 
   getTotalSeats(): number {
