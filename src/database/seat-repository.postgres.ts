@@ -22,10 +22,10 @@ export class PostgresSeatRepository implements SeatRepository {
     return result.rows;
   }
 
-  private async updateAtomic(seat: Seat, extraCondition: string): Promise<void> {
+  private updateAtomic(seat: Seat, extraCondition: string) {
     const { id, userId, status, holdExpiresAt } = seat.toJSON();
 
-    await this.client.query(
+    return this.client.query(
       `UPDATE seats
         SET status = $1, user_id = $2, hold_expires_at = $3
         WHERE id = $4 ${extraCondition}`,
@@ -33,19 +33,37 @@ export class PostgresSeatRepository implements SeatRepository {
     );
   }
 
-  hold(seat: Seat): Promise<void> {
-    return this.updateAtomic(seat, "AND status = 'available'");
+  async hold(seat: Seat): Promise<void> {
+    const results = await this.updateAtomic(seat, "AND status = 'available'");
+    if (results.rowCount === 0) {
+      throw new Error('Seat is not available for holding');
+    }
   }
 
-  reserve(seat: Seat): Promise<void> {
-    return this.updateAtomic(seat, "AND status = 'held' AND user_id = $2 AND hold_expires_at > CURRENT_TIMESTAMP");
+  async reserve(seat: Seat): Promise<void> {
+    const results = await this.updateAtomic(
+      seat,
+      "AND status = 'held' AND user_id = $2 AND hold_expires_at > CURRENT_TIMESTAMP"
+    );
+    if (results.rowCount === 0) {
+      throw new Error('Seat is not held by the user or hold has expired');
+    }
   }
 
-  release(seat: Seat): Promise<void> {
-    return this.updateAtomic(seat, "AND status = 'held' AND hold_expires_at <= CURRENT_TIMESTAMP");
+  async release(seat: Seat): Promise<void> {
+    const results = await this.updateAtomic(seat, "AND status = 'held' AND hold_expires_at <= CURRENT_TIMESTAMP");
+    if (results.rowCount === 0) {
+      throw new Error('Only expired held seats can be released');
+    }
   }
 
-  refresh(seat: Seat): Promise<void> {
-    return this.updateAtomic(seat, "AND status = 'held' AND user_id = $2 AND hold_expires_at > CURRENT_TIMESTAMP");
+  async refresh(seat: Seat): Promise<void> {
+    const results = await this.updateAtomic(
+      seat,
+      "AND status = 'held' AND user_id = $2 AND hold_expires_at > CURRENT_TIMESTAMP"
+    );
+    if (results.rowCount === 0) {
+      throw new Error('Seat is not held by the user or hold has expired');
+    }
   }
 }
