@@ -6,7 +6,6 @@ export class PostgresEventRepository implements EventRepository {
   constructor(private readonly client: Client) {}
 
   async create(event: Event): Promise<void> {
-    await this.client.connect();
     try {
       await this.client.query('BEGIN');
 
