@@ -62,7 +62,7 @@ A lot of non-functional pieces of software are part of a toolbox I have develope
   - Implement a cron job to run every second.
   - Implement a queue system to schedule expiration events.
   - Create a Postgres function and use with an extension like pg_cron to schedule expiration events.
-  - Custom error implementations for the entities and repositories API, which would allow easy error handling to decide whether to send an expected error response or an unexpected error to log and send a generic message as response.
+  - Currently, all errors are returning status 500. Custom error implementations for the entities and repositories API would solve that in an elegant way, allowing easy error handling to decide whether to send an expected error response or an unexpected error to log and send a generic message as response.
 
 ## Considerations
 
