@@ -8,7 +8,11 @@ For container execution, you need to have Docker and Docker Compose installed.
 docker-compose up -d --build
 ```
 
-For developing locally, you need to have Node.js and pnpm installed.
+Check the documentation at [http://localhost:8080](http://localhost:8080). The API will be running at [http://localhost:3000](http://localhost:3000).
+
+## Developing Locally
+
+You will need to have Node.js and pnpm installed.
 
 Install packages 
 
@@ -52,6 +56,7 @@ A lot of non-functional pieces of software are part of a toolbox I have develope
 
 ## Improvements
 
+- Currently, all errors are returning status 500. Custom error implementations for the entities and repositories API would solve that in an elegant way, allowing easy error handling to decide whether to send an expected error response or an unexpected error to log and send a generic message as response.
 - Tests are missing everywhere. Day to day I would for many features write the tests first and then implement, but I had a short time available and the validations were simple enough so I did not have to spend much time testing manually.
 - Database setup for integration tests with `tmpfs`, allowing data to be mapped to memory in the container speeding up test execution.
 - A better migrations management, the current one is idempotent, simple and enough for the task.
@@ -62,7 +67,6 @@ A lot of non-functional pieces of software are part of a toolbox I have develope
   - Implement a cron job to run every second.
   - Implement a queue system to schedule expiration events.
   - Create a Postgres function and use with an extension like pg_cron to schedule expiration events.
-  - Currently, all errors are returning status 500. Custom error implementations for the entities and repositories API would solve that in an elegant way, allowing easy error handling to decide whether to send an expected error response or an unexpected error to log and send a generic message as response.
 
 ## Considerations
 
