@@ -32,6 +32,8 @@ Business requirements are written in isolation as use case classes, in a Clean A
 
 Nearly every piece of software is meant to be a lego brick, having it's own responsibility, easily tested in isolation and replaceable by another driver, this also make easier to evolve the software over time with unpredictable business changes.
 
+The database layer is abstracted by a repository pattern, which is a simple interface to the database, it is not meant to be a full featured ORM, but a simple abstraction to make the database layer replaceable. Since some features could potentially have problems with race conditions, the repository layer implement atomic updates to avoid data corruption. I did not find a strong reason for using transactions.
+
 Lib choice prioritized a flexible and simple lib (Hono in this case), that can be easily bundled and uses ESM in its core. Bundling applications with performative tools that relies on engines like esbuild decreases build time for big applications, also reduces container size by stripping the node_modules completely. Typescript is executed locally with tsx to make it way faster than ts-node, big typescript projects relying on ts-node have huge development experience impact, I wanted to keep the refresh very quick and leave the type-check for the build process, and the IDE during development, of course.
 
 Because of the choice of a simple framework, it leads to a decision we don't have to think about when we pick a framework like Nest, for example.
