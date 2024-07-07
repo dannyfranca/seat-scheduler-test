@@ -4,6 +4,7 @@ import { CreateEvent } from '@/usecases/create-event';
 import { ListAvailableSeats } from '@/usecases/list-available-seats';
 import { HoldSeat } from '@/usecases/hold-seat';
 import { ReserveSeat } from '@/usecases/reserve-seat';
+import { RefreshSeat } from '@/usecases/refresh-seat';
 
 declare global {
   interface Dependencies {
@@ -13,6 +14,7 @@ declare global {
     listAvailableSeats: ListAvailableSeats;
     holdSeat: HoldSeat;
     reserveSeat: ReserveSeat;
+    refreshSeat: RefreshSeat;
   }
 }
 

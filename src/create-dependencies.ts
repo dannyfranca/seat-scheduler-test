@@ -8,6 +8,7 @@ import { PostgresSeatRepository } from './database/seat-repository.postgres';
 import { ListAvailableSeats } from './usecases/list-available-seats';
 import { HoldSeat } from './usecases/hold-seat';
 import { ReserveSeat } from './usecases/reserve-seat';
+import { RefreshSeat } from './usecases/refresh-seat';
 
 /**
  * Creates a container that holds all dependencies for the application.
@@ -28,6 +29,7 @@ export const createDependencies = (conf: AppConfig): Dependencies => {
   const listAvailableSeats = new ListAvailableSeats(seatRepo);
   const holdSeat = new HoldSeat(seatRepo);
   const reserveSeat = new ReserveSeat(seatRepo);
+  const refreshSeat = new RefreshSeat(seatRepo);
 
   return {
     logger,
@@ -36,5 +38,6 @@ export const createDependencies = (conf: AppConfig): Dependencies => {
     listAvailableSeats,
     holdSeat,
     reserveSeat,
+    refreshSeat,
   };
 };

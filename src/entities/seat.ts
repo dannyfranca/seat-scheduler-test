@@ -63,6 +63,16 @@ export class Seat {
     this.holdExpiresAt = null;
   }
 
+  refresh(userId: UniqueId): void {
+    if (this.status !== 'held' || !this.userId?.equals(userId)) {
+      throw new Error('Seat is not held by the user');
+    }
+    if (this.isHoldExpired()) {
+      throw new Error('Hold has expired');
+    }
+    this.holdExpiresAt = new Date(Date.now() + 60 * 1000); // 60 seconds from now;
+  }
+
   isHoldExpired(): boolean {
     // TODO: This rule could potentially change if the expiration hold does not have to be too strict regarding time from the business point of view.
     return this.status === 'held' && this.holdExpiresAt !== null && this.holdExpiresAt < new Date();
