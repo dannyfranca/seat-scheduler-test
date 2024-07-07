@@ -5,7 +5,7 @@
 For container execution, you need to have Docker and Docker Compose installed.
 
 ```bash
-docker-compose up
+docker-compose up -d --build
 ```
 
 For developing locally, you need to have Node.js and pnpm installed.
@@ -34,6 +34,8 @@ Nearly every piece of software is meant to be a lego brick, having it's own resp
 
 The database layer is abstracted by a repository pattern, which is a simple interface to the database, it is not meant to be a full featured ORM, but a simple abstraction to make the database layer replaceable. Since some features could potentially have problems with race conditions, the repository layer implement atomic updates to avoid data corruption. I did not find a strong reason for using transactions.
 
+The database setup has optimized indexes and triggers for the given scenarios. Setup can be found under `migrations/boot.sql`.
+
 Lib choice prioritized a flexible and simple lib (Hono in this case), that can be easily bundled and uses ESM in its core. Bundling applications with performative tools that relies on engines like esbuild decreases build time for big applications, also reduces container size by stripping the node_modules completely. Typescript is executed locally with tsx to make it way faster than ts-node, big typescript projects relying on ts-node have huge development experience impact, I wanted to keep the refresh very quick and leave the type-check for the build process, and the IDE during development, of course.
 
 Because of the choice of a simple framework, it leads to a decision we don't have to think about when we pick a framework like Nest, for example.
@@ -60,6 +62,7 @@ A lot of non-functional pieces of software are part of a toolbox I have develope
   - Implement a cron job to run every second.
   - Implement a queue system to schedule expiration events.
   - Create a Postgres function and use with an extension like pg_cron to schedule expiration events.
+  - Custom error implementations for the entities and repositories API, which would allow easy error handling to decide whether to send an expected error response or an unexpected error to log and send a generic message as response.
 
 ## Considerations
 
