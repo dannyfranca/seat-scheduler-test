@@ -72,6 +72,10 @@ export class Seat {
     return this.id;
   }
 
+  getHoldExpiration(): Date | null {
+    return this.holdExpiresAt ? new Date(this.holdExpiresAt) : null;
+  }
+
   toJSON(): SeatJSON {
     return {
       id: this.id.toString(),
