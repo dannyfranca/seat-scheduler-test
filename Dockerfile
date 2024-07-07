@@ -11,6 +11,7 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
+RUN pnpm run type-check
 RUN pnpm run build
 
 FROM node:22.4.0-alpine3.20
