@@ -24,7 +24,9 @@ When engineering team is mature enough to know what they are doing, it is often 
 
 A lot of non-functional pieces of software are part of a toolbox I have developed myself over years and using in production to make dev experience, troubleshooting and testing easier.
 
-# Missing
+# Improvements
 
 - Tests are missing everywhere. Day to day I would for many features write the tests first and then implement, but I had a short time available and the validations were simple enough so I did not have to spend much time testing manually.
+- Database setup for integration tests with `tmpfs`, allowing data to be mapped to memory in the container speeding up test execution.
 - A better migrations management, the current one is idempotent, simple and enough for the task.
+- Pagination on the list endpoint.
