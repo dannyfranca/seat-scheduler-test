@@ -14,6 +14,14 @@ export class PostgresSeatRepository implements SeatRepository {
     return Seat.reconstruct(seat.id, seat.status, seat.user_id, seat.hold_expires_at);
   }
 
+  async findAvailableByEventId(eventId: UniqueId): Promise<{ id: string }[]> {
+    const result = await this.client.query('SELECT id FROM seats WHERE event_id = $1 AND status = $2', [
+      eventId.toString(),
+      'available',
+    ]);
+    return result.rows;
+  }
+
   async updateAtomic(seat: Seat): Promise<void> {
     const { id, userId, status, holdExpiresAt } = seat.toJSON();
     let extraCondition = '';

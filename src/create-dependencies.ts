@@ -5,6 +5,7 @@ import { LogLevel } from './adapters/logger/base-logger';
 import { CreateEvent } from './usecases/create-event';
 import { PostgresEventRepository } from './database/event-repository.postgres';
 import { PostgresSeatRepository } from './database/seat-repository.postgres';
+import { ListAvailableSeats } from './usecases/list-available-seats';
 
 /**
  * Creates a container that holds all dependencies for the application.
@@ -22,10 +23,12 @@ export const createDependencies = (conf: AppConfig): Dependencies => {
   const seatRepo = new PostgresSeatRepository(pgClient);
 
   const createEvent = new CreateEvent(eventRepo);
+  const listAvailableSeats = new ListAvailableSeats(seatRepo);
 
   return {
     logger,
     lifecycleManager,
     createEvent,
+    listAvailableSeats,
   };
 };
