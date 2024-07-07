@@ -5,8 +5,8 @@ info:
   description: API for managing event seat reservations
 
 servers:
-  - url: http://localhost:3000
-    description: Local development server
+  - url: http://localhost:3000/v1
+    description: Local development server with v1 prefix
 
 paths:
   /events:
@@ -210,3 +210,4 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+

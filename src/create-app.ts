@@ -12,6 +12,7 @@ import { createRestApi } from './utils/create-rest-api';
  */
 export const createApp = (deps: Dependencies) =>
   createRestApi(deps)
+    .basePath('/v1')
     .use('*', authMiddleware)
     .use('*', defineCorsMiddleware)
     .use('*', defineDependencyInjectionMiddleware(deps))
