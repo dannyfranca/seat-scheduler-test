@@ -1,6 +1,7 @@
 // import { createMyriadApi } from './apis/myriad';
 import { createEventsApi } from './apis/events';
 import { createHealthApi } from './apis/health';
+import { createSeatsApi } from './apis/seats';
 import { authMiddleware } from './middlewares/auth';
 import { defineDependencyInjectionMiddleware } from './middlewares/inject-dependencies';
 import { defineOnGoingRequestsMiddleware } from './middlewares/ongoing-requests';
@@ -15,4 +16,5 @@ export const createApp = (deps: Dependencies) =>
     .use('*', defineDependencyInjectionMiddleware(deps))
     .use('*', defineOnGoingRequestsMiddleware(deps.lifecycleManager))
     .route('/events', createEventsApi(deps))
+    .route('/seats', createSeatsApi(deps))
     .route('/health', createHealthApi(deps));
