@@ -55,25 +55,8 @@ export class PostgresEventRepository implements EventRepository {
     );
   }
 
-  async findAll(): Promise<Event[]> {
-    const result = await this.client.query('SELECT * FROM events');
-    const events: Event[] = [];
-    for (const event of result.rows) {
-      const seats = await this.client.query('SELECT * FROM seats WHERE event_id = $1', [event.id]);
-      events.push(
-        Event.reconstruct(
-          event.id,
-          seats.rows.map(
-            (seat): SeatJSON => ({
-              id: seat.id,
-              userId: seat.user_id ?? null,
-              status: seat.status,
-              holdExpiresAt: seat.hold_expires_at,
-            })
-          )
-        )
-      );
-    }
-    return events;
+  async findAll(): Promise<{ id: string }[]> {
+    const result = await this.client.query('SELECT event_id as id FROM events');
+    return result.rows;
   }
 }
