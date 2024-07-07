@@ -1,6 +1,28 @@
 # seat-scheduler-test
 
-# Concepts
+## Running the Application
+
+For container execution, you need to have Docker and Docker Compose installed.
+
+```bash
+docker-compose up
+```
+
+For developing locally, you need to have Node.js and pnpm installed.
+
+Install packages 
+
+```bash
+pnpm install
+```
+
+Run development server.
+
+```bash
+pnpm run dev
+```
+
+## Concepts
 
 This uses a Domain Driven Design approach, which naturally leads to more complex code, but rich and validated entities everywhere.
 
@@ -24,9 +46,15 @@ When engineering team is mature enough to know what they are doing, it is often 
 
 A lot of non-functional pieces of software are part of a toolbox I have developed myself over years and using in production to make dev experience, troubleshooting and testing easier.
 
-# Improvements
+## Improvements
 
 - Tests are missing everywhere. Day to day I would for many features write the tests first and then implement, but I had a short time available and the validations were simple enough so I did not have to spend much time testing manually.
 - Database setup for integration tests with `tmpfs`, allowing data to be mapped to memory in the container speeding up test execution.
 - A better migrations management, the current one is idempotent, simple and enough for the task.
 - Pagination on the list endpoint.
+- API design was very minimal, but could be richer with more requirements about its usage. A.K.A. frontend requirements.
+- Implement heath-checks endpoint.
+
+## Considerations
+
+- The current API design would not allow smooth future potential transition to an optimized storage like DynamoDB where seats would be in the event partition, since it would require eventId as well to query for the data. The API would have to be redesigned to add seat under event endpoints. A.K.A. `/events/:eventId/seats/:seatId/hold`
