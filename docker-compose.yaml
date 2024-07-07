@@ -21,5 +21,13 @@ services:
       - POSTGRES_DB=seat_scheduler_test
     volumes:
       - pg-data:/var/lib/postgresql/data
+
+  docs:
+    image: nginx:alpine
+    volumes:
+      - ./docs:/usr/share/nginx/html
+    ports:
+      - '8080:80'
+
 volumes:
   pg-data:
