@@ -1,7 +1,7 @@
 import { toJson } from './to-json';
 
 /**
- * Safely parse a thrown value.
+ * Safely parse a thrown value, making sure it is type safe by having at least a message property.
  * @param error - The error to parse
  * @returns The parsed error context
  */
