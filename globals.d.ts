@@ -8,6 +8,7 @@ declare module 'hono' {
   interface Env {
     Bindings: HonoBindings;
     Variables: {
+      userId: string;
       deps: Dependencies;
     };
   }
