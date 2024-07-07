@@ -55,6 +55,9 @@ export class Seat {
   }
 
   release(): void {
+    if (!this.isHoldExpired()) {
+      throw new Error('Only expired held seats can be released.');
+    }
     this.status = 'available';
     this.userId = null;
     this.holdExpiresAt = null;
