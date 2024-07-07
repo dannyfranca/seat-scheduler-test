@@ -8,7 +8,7 @@ export class ReserveSeat {
     const seat = await this.seatRepo.findById(new UniqueId(seatId));
     if (!seat) throw new Error('Seat not found');
     seat.reserve(new UniqueId(userId));
-    await this.seatRepo.updateAtomic(seat);
+    await this.seatRepo.reserve(seat);
     // TODO: handle errors on update atomic
   }
 }

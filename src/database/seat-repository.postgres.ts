@@ -22,18 +22,8 @@ export class PostgresSeatRepository implements SeatRepository {
     return result.rows;
   }
 
-  async updateAtomic(seat: Seat): Promise<void> {
+  private async updateAtomic(seat: Seat, extraCondition: string): Promise<void> {
     const { id, userId, status, holdExpiresAt } = seat.toJSON();
-    let extraCondition = '';
-
-    switch (status) {
-      case 'held':
-        extraCondition = "AND status = 'available'";
-        break;
-      case 'reserved':
-        extraCondition = "AND status = 'held' AND user_id = $2 AND hold_expires_at > CURRENT_TIMESTAMP";
-        break;
-    }
 
     await this.client.query(
       `UPDATE seats
@@ -41,5 +31,21 @@ export class PostgresSeatRepository implements SeatRepository {
         WHERE id = $4 ${extraCondition}`,
       [status, userId, holdExpiresAt, id]
     );
+  }
+
+  hold(seat: Seat): Promise<void> {
+    return this.updateAtomic(seat, "AND status = 'available'");
+  }
+
+  reserve(seat: Seat): Promise<void> {
+    return this.updateAtomic(seat, "AND status = 'held' AND user_id = $2 AND hold_expires_at > CURRENT_TIMESTAMP");
+  }
+
+  release(seat: Seat): Promise<void> {
+    return this.updateAtomic(seat, "AND status = 'held' AND hold_expires_at <= CURRENT_TIMESTAMP");
+  }
+
+  refresh(seat: Seat): Promise<void> {
+    return this.updateAtomic(seat, "AND status = 'held' AND user_id = $2 AND hold_expires_at > CURRENT_TIMESTAMP");
   }
 }

@@ -8,7 +8,7 @@ export class HoldSeat {
     const seat = await this.seatRepo.findById(new UniqueId(seatId));
     if (!seat) throw new Error('Seat not found');
     seat.hold(new UniqueId(userId));
-    await this.seatRepo.updateAtomic(seat);
+    await this.seatRepo.hold(seat);
     // TODO: handle errors on update atomic
     return {
       holdExpiresAt: seat.getHoldExpiration()!,
