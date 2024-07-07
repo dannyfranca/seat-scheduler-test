@@ -19,7 +19,8 @@ FROM node:22.4.0-alpine3.20
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
-COPY package.json ./migrations ./
+COPY package.json ./
+COPY ./migrations/boot.sql ./migrations/boot.sql
 
 ENV NODE_ENV production
 
