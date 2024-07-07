@@ -15,7 +15,8 @@ export const errorHandler =
     const parsedError = safeParseErrorContext(error);
 
     let message = 'Internal Server Error';
-    if (status < 500 && parsedError?.message) message = parsedError.message;
+    // if (status < 500 && parsedError?.message) message = parsedError.message;
+    if (parsedError?.message) message = parsedError.message;
     const body = { message };
 
     // TODO: Log error for only non-expected errors. With custom errors implemented, it becomes easier to track what should be logged as error and notify a generic message as response and what should not be logged as error and infer the message to the user.
