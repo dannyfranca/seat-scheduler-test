@@ -1,5 +1,5 @@
 # Build stage
-FROM node:22.4.0-alpine3.20 AS builder
+FROM node:20.15.0-alpine3.20 AS builder
 
 RUN npm install -g pnpm
 
@@ -14,7 +14,7 @@ COPY . .
 RUN pnpm run type-check
 RUN pnpm run build
 
-FROM node:22.4.0-alpine3.20
+FROM node:20.15.0-alpine3.20
 
 WORKDIR /app
 
