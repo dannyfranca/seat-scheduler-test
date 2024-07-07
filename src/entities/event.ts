@@ -19,8 +19,8 @@ export class Event {
     }
     const seats = new Map<string, Seat>();
     for (let i = 0; i < totalSeats; i++) {
-      const seatId = Seat.create();
-      seats.set(seatId.toString(), seatId);
+      const seat = Seat.create();
+      seats.set(seat.getId().toString(), seat);
     }
     return new Event(UniqueId.create().toString(), seats);
   }
