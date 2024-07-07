@@ -3,11 +3,11 @@ services:
     build: .
     restart: on-failure
     ports:
-      - '3000:80'
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - APP_NAME=seat-scheduler
-      - PORT=80
+      - PORT=3000
       - POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/seat_scheduler_test
     depends_on:
       - postgres
