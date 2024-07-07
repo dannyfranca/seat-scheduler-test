@@ -1,32 +1,19 @@
-import { z } from 'zod';
-import { zValidator } from '@hono/zod-validator';
 import { defineRoute } from '@/utils/factories';
 
 export const defineHoldSeat = defineRoute((rest) =>
-  rest.post('/:eventId/seats/:seatId/hold', zValidator('json', bodySchema), async (c) => {
-    const body = c.req.valid('json');
+  rest.post('/:eventId/seats/:seatId/hold', async (c) => {
     const seatId = c.req.param('seatId');
-    const eventId = c.req.param('eventId');
-    // TODO: implement
+    const userId = c.var.userId;
+    const { holdExpiresAt } = await c.var.deps.holdSeat.execute({ userId, seatId });
     return c.json(
       {
-        eventId: '',
-        seatId: '',
-        userId: '',
-        holdExpiresAt: '',
+        holdExpiresAt: holdExpiresAt.toISOString(),
       } satisfies ResponseBody,
       201
     );
   })
 );
 
-const bodySchema = z.object({
-  userId: z.string().uuid(),
-});
-
 interface ResponseBody {
-  eventId: string;
-  seatId: string;
-  userId: string;
   holdExpiresAt: string; // ISO 8601 timestamp
 }

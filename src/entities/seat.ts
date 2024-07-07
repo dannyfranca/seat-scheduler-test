@@ -61,6 +61,7 @@ export class Seat {
   }
 
   isHoldExpired(): boolean {
+    // TODO: This rule could potentially change if the expiration hold does not have to be too strict regarding time from the business point of view.
     return this.status === 'held' && this.holdExpiresAt !== null && this.holdExpiresAt < new Date();
   }
 

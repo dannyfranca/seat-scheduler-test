@@ -7,6 +7,7 @@ import { PostgresEventRepository } from './database/event-repository.postgres';
 import { PostgresSeatRepository } from './database/seat-repository.postgres';
 import { ListAvailableSeats } from './usecases/list-available-seats';
 import { HoldSeat } from './usecases/hold-seat';
+import { ReserveSeat } from './usecases/reserve-seat';
 
 /**
  * Creates a container that holds all dependencies for the application.
@@ -26,6 +27,7 @@ export const createDependencies = (conf: AppConfig): Dependencies => {
   const createEvent = new CreateEvent(eventRepo);
   const listAvailableSeats = new ListAvailableSeats(seatRepo);
   const holdSeat = new HoldSeat(seatRepo);
+  const reserveSeat = new ReserveSeat(seatRepo);
 
   return {
     logger,
@@ -33,5 +35,6 @@ export const createDependencies = (conf: AppConfig): Dependencies => {
     createEvent,
     listAvailableSeats,
     holdSeat,
+    reserveSeat,
   };
 };

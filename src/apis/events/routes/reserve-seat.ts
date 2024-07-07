@@ -1,32 +1,12 @@
-import { z } from 'zod';
-import { zValidator } from '@hono/zod-validator';
 import { defineRoute } from '@/utils/factories';
 
 export const defineReserveSeat = defineRoute((rest) =>
-  rest.post('/:eventId/seats/:seatId/reserve', zValidator('json', bodySchema), async (c) => {
-    const body = c.req.valid('json');
+  rest.post('/:eventId/seats/:seatId/reserve', async (c) => {
     const seatId = c.req.param('seatId');
-    const eventId = c.req.param('eventId');
-    // TODO: implement
-    return c.json(
-      {
-        eventId: '',
-        seatId: '',
-        userId: '',
-        status: 'reserved',
-      } satisfies ResponseBody,
-      201
-    );
+    const userId = c.var.userId;
+    await c.var.deps.reserveSeat.execute({ userId, seatId });
+    return c.json({} satisfies ResponseBody, 201);
   })
 );
 
-const bodySchema = z.object({
-  userId: z.string().uuid(),
-});
-
-interface ResponseBody {
-  eventId: string;
-  seatId: string;
-  userId: string;
-  status: 'reserved';
-}
+interface ResponseBody {}
