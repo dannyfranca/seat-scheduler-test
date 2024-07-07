@@ -8,7 +8,7 @@ export const defineListAvailableSeats = defineRoute((rest) =>
       {
         availableSeats,
       } satisfies ResponseBody,
-      201
+      200
     );
   })
 );
