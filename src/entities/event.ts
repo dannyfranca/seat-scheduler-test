@@ -14,6 +14,9 @@ export class Event {
     if (totalSeats < 10 || totalSeats > 1000) {
       throw new Error('Events must have between 10 and 1000 seats');
     }
+    if (!Number.isInteger(totalSeats)) {
+      throw new Error('Events must have an integer number of seats');
+    }
     const seats = new Map<string, Seat>();
     for (let i = 0; i < totalSeats; i++) {
       const seatId = Seat.create();
