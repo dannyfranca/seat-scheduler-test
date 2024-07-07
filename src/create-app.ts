@@ -1,8 +1,9 @@
 // import { createMyriadApi } from './apis/myriad';
 import { createEventsApi } from './apis/events';
 import { createHealthApi } from './apis/health';
-import { injectDependencies } from './middlewares/inject-dependencies';
-import { onGoingRequests } from './middlewares/ongoing-requests';
+import { authMiddleware } from './middlewares/auth';
+import { defineDependencyInjectionMiddleware } from './middlewares/inject-dependencies';
+import { defineOnGoingRequestsMiddleware } from './middlewares/ongoing-requests';
 import { createRestApi } from './utils/create-rest-api';
 
 /**
@@ -10,7 +11,8 @@ import { createRestApi } from './utils/create-rest-api';
  */
 export const createApp = (deps: Dependencies) =>
   createRestApi(deps)
-    .use('*', injectDependencies(deps))
-    .use('*', onGoingRequests(deps.lifecycleManager))
+    .use('*', authMiddleware)
+    .use('*', defineDependencyInjectionMiddleware(deps))
+    .use('*', defineOnGoingRequestsMiddleware(deps.lifecycleManager))
     .route('/events', createEventsApi(deps))
     .route('/health', createHealthApi(deps));
