@@ -56,6 +56,10 @@ A lot of non-functional pieces of software are part of a toolbox I have develope
 - Pagination on the list endpoint.
 - API design was very minimal, but could be richer with more requirements about its usage. A.K.A. frontend requirements.
 - Implement heath-checks endpoint.
+- For simplicity, an expiration was set as a routine every 5 seconds in the application. A more production like version would be an external system handling the expiration. Also, the 5 seconds might not be acceptable if we want more precision for expirations. Some alternatives are:
+  - Implement a cron job to run every second.
+  - Implement a queue system to schedule expiration events.
+  - Create a Postgres function and use with an extension like pg_cron to schedule expiration events.
 
 ## Considerations
 

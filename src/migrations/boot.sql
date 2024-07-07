@@ -44,28 +44,3 @@ BEGIN
         EXECUTE FUNCTION update_modified_column();
     END IF;
 END $$;
-
--- Create function to automatically release expired holds if it doesn't exist
-CREATE OR REPLACE FUNCTION release_expired_holds()
-RETURNS void AS $$
-BEGIN
-    UPDATE seats
-    SET status = 'available', user_id = NULL, hold_expires_at = NULL
-    WHERE status = 'held' AND hold_expires_at < CURRENT_TIMESTAMP;
-    SKIP LOCKED;
-END;
-$$ LANGUAGE plpgsql;
-
--- Create pg_cron extension if it doesn't exist
-CREATE EXTENSION IF NOT EXISTS pg_cron;
-
--- Schedule the cron job only if it doesn't already exist
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM cron.job WHERE command = 'SELECT release_expired_holds()') THEN
-        PERFORM cron.schedule('release_expired_holds', '*/5 * * * * *', 'SELECT release_expired_holds()');
-        RAISE NOTICE 'Created new cron job: release_expired_holds';
-    ELSE
-        RAISE NOTICE 'Cron job release_expired_holds already exists';
-    END IF;
-END $$;
