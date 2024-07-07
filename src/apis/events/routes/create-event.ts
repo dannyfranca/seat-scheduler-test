@@ -17,7 +17,7 @@ export const defineCreateEvent = defineRoute((rest) =>
 );
 
 const bodySchema = z.object({
-  totalSeats: z.number(),
+  totalSeats: z.number().int(),
 });
 
 interface ResponseBody {
