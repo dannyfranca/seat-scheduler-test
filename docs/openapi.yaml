@@ -1,0 +1,212 @@
+openapi: 3.0.0
+info:
+  title: Event Seat Reservation API
+  version: 1.0.0
+  description: API for managing event seat reservations
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+paths:
+  /events:
+    post:
+      summary: Create a new event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventRequest'
+      responses:
+        '201':
+          description: Event created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEventResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /events/{eventId}/available-seats:
+    get:
+      summary: List available seats for an event
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Available seats retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAvailableSeatsResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /seats/{seatId}/hold:
+    post:
+      summary: Hold a seat
+      parameters:
+        - name: seatId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '201':
+          description: Seat held successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HoldSeatResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /seats/{seatId}/reserve:
+    post:
+      summary: Reserve a seat
+      parameters:
+        - name: seatId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '201':
+          description: Seat reserved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReserveSeatResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /seats/{seatId}/hold/refresh:
+    post:
+      summary: Refresh hold on a seat
+      parameters:
+        - name: seatId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '201':
+          description: Hold refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshHoldResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    CreateEventRequest:
+      type: object
+      required:
+        - totalSeats
+      properties:
+        totalSeats:
+          type: integer
+          minimum: 10
+          maximum: 1000
+
+    CreateEventResponse:
+      type: object
+      properties:
+        eventId:
+          type: string
+          format: uuid
+
+    ListAvailableSeatsResponse:
+      type: object
+      properties:
+        availableSeats:
+          type: array
+          items:
+            type: object
+            properties:
+              seatId:
+                type: string
+                format: uuid
+
+    HoldSeatResponse:
+      type: object
+      properties:
+        holdExpiresAt:
+          type: string
+          format: date-time
+
+    ReserveSeatResponse:
+      type: object
+      properties: {}
+
+    RefreshHoldResponse:
+      type: object
+      properties: {}
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Conflict:
+      description: Conflict in resource state
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'

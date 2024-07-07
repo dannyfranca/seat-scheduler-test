@@ -7,6 +7,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "build": "vite build",
+    "docs": "serve docs/ -l 1234",
     "dev": "dotenv -e .env.local -- tsx watch ./src/main.ts",
     "create-db": "dotenv -e .env.local -- tsx ./scripts/create-db.ts",
     "migrate": "dotenv -e .env.local -- tsx ./scripts/migrate.ts"
@@ -29,6 +30,7 @@
     "hono": "3.12.6",
     "pg": "8.12.0",
     "prettier": "3.2.5",
+    "serve": "14.2.3",
     "tslib": "2.6.2",
     "tsup": "8.0.2",
     "tsx": "4.9.3",
