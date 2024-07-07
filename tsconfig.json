@@ -23,6 +23,7 @@
         "esModuleInterop": true,
         "noImplicitAny": false,
         "types": [
+            "vitest/globals",
             "node"
         ],
         "paths": {
@@ -31,12 +32,8 @@
             ]
         }
     },
-    "references": [
-        {
-            "path": "./tsconfig.app.json"
-        },
-        {
-            "path": "./tsconfig.spec.json"
-        }
+    "include": [
+        "*.d.ts",
+        "src/**/*.ts"
     ]
 }

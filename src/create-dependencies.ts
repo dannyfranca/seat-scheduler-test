@@ -9,8 +9,7 @@ import { ListAvailableSeats } from './usecases/list-available-seats';
 import { HoldSeat } from './usecases/hold-seat';
 import { ReserveSeat } from './usecases/reserve-seat';
 import { RefreshSeat } from './usecases/refresh-seat';
-import { migrate } from './migrations/migrate';
-import { Scheduler } from './adapters/scheduler';
+import { migrate } from './migrate';
 import { ReleaseExpiredHolds } from './usecases/release-expired-holds';
 
 /**
@@ -36,14 +35,6 @@ export const createDependencies = (conf: AppConfig): Dependencies => {
   const refreshSeat = new RefreshSeat(seatRepo);
   const releaseExpiredHolds = new ReleaseExpiredHolds(pgClient);
 
-  // scheduler
-  const scheduler = new Scheduler();
-  scheduler.scheduleTask('releaseExpiredHolds', '*/5 * * * * *', () => {
-    releaseExpiredHolds.execute();
-  });
-  lifecycleManager.addBootHook(() => scheduler.start());
-  lifecycleManager.addShutdownHook(() => scheduler.stop());
-
   return {
     logger,
     lifecycleManager,
@@ -52,5 +43,6 @@ export const createDependencies = (conf: AppConfig): Dependencies => {
     holdSeat,
     reserveSeat,
     refreshSeat,
+    releaseExpiredHolds,
   };
 };

@@ -1,4 +1,5 @@
 import { serve } from '@hono/node-server';
+import { Cron } from 'croner';
 import { createDependencies } from './create-dependencies';
 import { createApp } from './create-app';
 import { loadConfigs } from './load-configs';
@@ -20,10 +21,17 @@ const server = serve(
   }
 );
 
+const job = new Cron('*/5 * * * * *', async () => {
+  const onRequestFinished = deps.lifecycleManager.trackRequest();
+  await deps.releaseExpiredHolds.execute();
+  onRequestFinished();
+});
+
 process.on('SIGTERM', gracefulShutdown);
 process.on('SIGINT', gracefulShutdown);
 
 function gracefulShutdown() {
+  job.pause();
   server.close(() => {
     console.log('Server stopped accepting new connections.');
     deps.lifecycleManager.shutdown();

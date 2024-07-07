@@ -5,6 +5,7 @@ import { ListAvailableSeats } from '@/usecases/list-available-seats';
 import { HoldSeat } from '@/usecases/hold-seat';
 import { ReserveSeat } from '@/usecases/reserve-seat';
 import { RefreshSeat } from '@/usecases/refresh-seat';
+import { ReleaseExpiredHolds } from '@/usecases/release-expired-holds';
 
 declare global {
   interface Dependencies {
@@ -15,6 +16,7 @@ declare global {
     holdSeat: HoldSeat;
     reserveSeat: ReserveSeat;
     refreshSeat: RefreshSeat;
+    releaseExpiredHolds: ReleaseExpiredHolds;
   }
 }
 
